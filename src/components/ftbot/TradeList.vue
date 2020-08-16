@@ -91,11 +91,16 @@ export default class TradeList extends Vue {
     {
       key: this.activeTrades ? 'current_profit' : 'close_profit',
       label: this.activeTrades ? 'Current profit' : 'Profit',
-      formatter: 'formatPercent',
+      // formatter: 'formatPercent',
+    },
+    {
+      key: this.activeTrades ? 'current_profit_pct' : 'close_profit_pct',
+      label: this.activeTrades ? 'Current profit' : 'Profit',
+      // formatter: 'formatPercent',
     },
     { key: 'open_date', label: 'Open date' },
     { key: 'close_date', label: 'Close date' },
-    ...(this.activeTrades ? [{ key: 'actions' }] : []),
+    ...(this.activeTrades ? [{ key: 'actions' }] : [{ key: 'actions' }]),
   ];
 
   formatPercent;
@@ -126,6 +131,7 @@ export default class TradeList extends Vue {
   }
 
   showDetails(trade) {
+    console.log(trade);
     if (this.detailTradeId === trade.trade_id) {
       this.setDetailTrade(null);
     } else {
