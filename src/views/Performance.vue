@@ -4,19 +4,25 @@
     <h1>Demo examples of vue-chartjs</h1>
     <div class="columns">
       <div class="column">
-        <h3>Daily balance</h3>
+        <h3>Daily profit</h3>
         <!-- <line-chart :data="dailyStats.data"></line-chart> -->
         <line-chart :data="dailyBalances"></line-chart>
       </div>
       <div class="column">
+        <h3>Profit per pair</h3>
+        <column-chart :colors="['green', '#666']" :data="profitPerPair"></column-chart>
+        <!--Bar Chart example-->\
+      </div>
+      <div class="column">
         <h3>Number of trades per pair</h3>
-        <bar-chart :data="performanceGraph"></bar-chart>
+        <column-chart :data="tradesPerPair"></column-chart>
         <!--Bar Chart example-->
       </div>
     </div>
     <div class="columns">
       <div class="column">
-        <h3>Bubble Chart</h3>
+        <h3>Balance per pair</h3>
+        <!-- <pie-chart :data="balancePerPair"></pie-chart> -->
         <!--Bubble Chart example-->
       </div>
       <div class="column">
@@ -35,7 +41,7 @@ import Line from 'vue-chartjs';
 export default {
   name: 'DailyStats',
   computed: {
-    ...mapState('ftbot', ['dailyBalances', 'performanceStats']),
+    ...mapState('ftbot', ['dailyBalances', 'performanceStats', 'balance']),
     dailyFields() {
       return [
         { key: 'date', label: 'Day' },
@@ -44,21 +50,36 @@ export default {
         { key: 'trade_count', label: 'Trades' },
       ];
     },
-    performanceGraph() {
+    tradesPerPair() {
       const chartData = [];
       this.performanceStats.forEach((element) => {
         chartData.push([element.pair, element.count]);
       });
-      console.log(chartData);
+      return chartData;
+    },
+    profitPerPair() {
+      const chartData = [];
+      this.performanceStats.forEach((element) => {
+        console.log(element);
+        chartData.push([element.pair, element.profit]);
+      });
+      return chartData;
+    },
+    balancePerPair() {
+      const chartData = [];
+      this.balance.currencies.forEach((element) => {
+        chartData.push([element.currency, element.est_stake]);
+      });
       return chartData;
     },
   },
   methods: {
-    ...mapActions('ftbot', ['getDailyBalances', 'getPerformance']),
+    ...mapActions('ftbot', ['getDailyBalances', 'getPerformance', 'getBalance']),
   },
   mounted() {
     this.getDailyBalances();
     this.getPerformance();
+    this.getBalance();
   },
 };
 </script>

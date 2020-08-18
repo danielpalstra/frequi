@@ -136,7 +136,6 @@ export default {
         // TODO create array from dict items
         resp.data.data.forEach((element) => {
           chartData.push([element.date, element.abs_profit]);
-          console.log(element.abs_profit);
           return commit('updateDailyBalances', chartData);
         });
       });
