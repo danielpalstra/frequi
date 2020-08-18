@@ -15,6 +15,7 @@ export default {
     botState: {},
     balance: {},
     dailyStats: [],
+    dailyBalances: [],
     pairlistMethods: [],
     detailTradeId: null,
   },
@@ -53,6 +54,9 @@ export default {
     },
     updateDaily(state, daily) {
       state.dailyStats = daily;
+    },
+    updateDailyBalances(state, daily) {
+      state.dailyBalances = daily;
     },
     updateBalance(state, balance) {
       state.balance = balance;
@@ -124,6 +128,19 @@ export default {
         .get('/daily')
         .then((result) => commit('updateDaily', result.data))
         .catch(console.error);
+    },
+    getDailyBalances({ commit }) {
+      api.get('/daily').then((resp) => {
+        const chartData = [];
+        console.log(resp);
+        // TODO create array from dict items
+        resp.data.data.forEach((element) => {
+          chartData.push([element.date, element.abs_profit]);
+          console.log(element.abs_profit);
+          return commit('updateDailyBalances', chartData);
+        });
+      });
+      // return commit('updateDailyBalances', ['1', '2', '3']);
     },
     getState({ commit }) {
       return api
